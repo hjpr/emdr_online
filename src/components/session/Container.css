@@ -1,0 +1,107 @@
+.container-checkpoint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: var(--space-lg);
+}
+
+.container-visual-area {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: var(--space-xl) auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-interactive,
+.container-locked {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.container-box {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+}
+
+.container-box.pressing {
+    transform: scale(0.95);
+}
+
+.container-body {
+    width: 180px;
+    height: 120px;
+    background: linear-gradient(135deg, rgba(100, 200, 255, 0.2), rgba(169, 100, 255, 0.2));
+    border: 2px solid rgba(100, 200, 255, 0.5);
+    border-radius: var(--radius-md);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 4px 16px rgba(255, 255, 255, 0.1);
+    position: absolute;
+    bottom: 0;
+}
+
+.container-lid {
+    width: 180px;
+    height: 60px;
+    position: absolute;
+    top: 0;
+    perspective: 500px;
+}
+
+.lid-top {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(100, 200, 255, 0.3), rgba(169, 100, 255, 0.3));
+    border: 2px solid rgba(100, 200, 255, 0.6);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    box-shadow:
+        0 -4px 16px rgba(100, 200, 255, 0.2),
+        inset 0 2px 8px rgba(255, 255, 255, 0.2);
+}
+
+.container-lid.closed {
+    transform: rotateX(0deg) !important;
+}
+
+.container-box.closed .container-body {
+    background: linear-gradient(135deg, rgba(100, 200, 255, 0.15), rgba(169, 100, 255, 0.15));
+}
+
+.padlock-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.5));
+    z-index: 10;
+}
+
+.progress-ring {
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.instruction-text {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: var(--font-size-md);
+    margin-top: var(--space-xl);
+}

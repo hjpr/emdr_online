@@ -1,0 +1,78 @@
+.anchor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: var(--space-lg);
+    background: linear-gradient(180deg, #0a1628 0%, #0f0f14 100%);
+}
+
+.affirmation-container {
+    margin-bottom: var(--space-xl);
+    padding: var(--space-xl);
+}
+
+.affirmation-text {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    color: var(--text-primary);
+    text-align: center;
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+.hold-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-xl);
+}
+
+.hold-button {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: var(--bg-glass);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    user-select: none;
+}
+
+.hold-button:hover {
+    background: var(--bg-glass-hover);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.hold-button.holding {
+    transform: scale(0.95);
+    background: var(--bg-glass-hover);
+}
+
+.hold-button.complete {
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(168, 85, 247, 0.2));
+    border-color: rgba(34, 211, 238, 0.5);
+}
+
+.hold-progress-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.hold-text {
+    font-size: var(--font-size-lg);
+    color: var(--text-primary);
+    font-weight: 500;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.hold-button.complete .hold-text {
+    font-size: 3rem;
+}

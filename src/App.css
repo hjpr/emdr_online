@@ -1,0 +1,21 @@
+.app {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  transition: background-color 1s ease;
+}
+
+/* Global checkpoint styles */
+.checkpoint {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.checkpoint-content {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--space-lg);
+}

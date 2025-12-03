@@ -1,0 +1,57 @@
+.safe-place {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: var(--space-lg);
+}
+
+.safe-place-visual {
+    margin: var(--space-xl) auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 150px;
+}
+
+.minds-eye-icon {
+    font-size: 5rem;
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
+}
+
+.input-container {
+    max-width: 400px;
+    margin: 0 auto var(--space-xl);
+}
+
+.input-label {
+    display: block;
+    margin-bottom: var(--space-sm);
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+    text-align: center;
+}
+
+.safe-place-input {
+    width: 100%;
+    padding: var(--space-md);
+    background: var(--bg-glass);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: var(--font-size-md);
+    font-family: var(--font-family);
+    text-align: center;
+    transition: all var(--transition-base);
+}
+
+.safe-place-input:focus {
+    outline: none;
+    border-color: rgba(100, 200, 255, 0.5);
+    background: var(--bg-glass-hover);
+    box-shadow: 0 0 20px rgba(100, 200, 255, 0.2);
+}
+
+.safe-place-input::placeholder {
+    color: var(--text-muted);
+}
