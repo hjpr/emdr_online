@@ -149,18 +149,38 @@ const SOSGrounding = () => {
                                 </motion.div>
                             </div>
 
-                            <motion.button
-                                className="continue-btn"
-                                onClick={nextCheckpoint}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: isComplete ? 1 : 0 }}
-                                transition={{ duration: 5, ease: "easeIn" }}
-                                style={{ pointerEvents: isComplete ? 'auto' : 'none', marginTop: '2rem' }}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                I feel steady enough to proceed
-                            </motion.button>
+                            <div className="action-buttons">
+                                <motion.button
+                                    className="continue-btn"
+                                    onClick={nextCheckpoint}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: isComplete ? 1 : 0 }}
+                                    transition={{ duration: 5, ease: "easeIn" }}
+                                    style={{ pointerEvents: isComplete ? 'auto' : 'none' }}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    I feel steady enough to proceed
+                                </motion.button>
+
+                                <motion.a
+                                    href="https://dbh.dc.gov/service/access-helpline"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="crisis-btn"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: cycleCount >= 10 ? 1 : 0 }}
+                                    transition={{ duration: 2, ease: "easeIn" }}
+                                    style={{
+                                        pointerEvents: cycleCount >= 10 ? 'auto' : 'none',
+                                        textDecoration: 'none'
+                                    }}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    I need professional help now
+                                </motion.a>
+                            </div>
                         </motion.div>
                     )}
                 </AnimatePresence>

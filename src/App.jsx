@@ -2,6 +2,8 @@ import { AnimatePresence } from 'framer-motion'
 import { AppProvider, useApp } from './context/AppContext'
 
 // Triage components
+import Intro from './components/triage/Intro'
+import Disclaimer from './components/triage/Disclaimer'
 import PulseCheck from './components/triage/PulseCheck'
 import SOSGrounding from './components/triage/SOSGrounding'
 
@@ -21,6 +23,10 @@ function AppContent() {
 
   const renderCheckpoint = () => {
     switch (currentCheckpoint) {
+      case 0:
+        return <Intro key="intro" />
+      case 0.5:
+        return <Disclaimer key="disclaimer" />
       case 1:
         return <PulseCheck key="pulse-check" />
       case 1.5:

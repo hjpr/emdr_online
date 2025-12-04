@@ -73,7 +73,13 @@ const Container = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
         >
-            <div className="checkpoint-content">
+            <motion.div
+                className="checkpoint-content"
+                initial={{ y: 20 }}
+                animate={{ y: 0 }}
+                exit={{ y: 20 }}
+                transition={{ duration: 0.6 }}
+            >
                 <h1 className="checkpoint-title">The Container</h1>
                 <p className="checkpoint-subtitle">
                     Visualize the event or image bothering you. <br />
@@ -177,7 +183,7 @@ const Container = () => {
                         Hold to close the lid and lock it away
                     </motion.p>
                 )}
-            </div>
+            </motion.div>
         </motion.div>
     )
 }

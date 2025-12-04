@@ -28,19 +28,27 @@ Following a code, patient death, assault, or other distressing event, a nurse wo
 
 Goal: Immediate assessment to determine safety and readiness.
 
+#### Checkpoint 0: Intro
+
+**UI Elements:**
+- Text: "Before I go home..." -> "I'm going to take a moment to breathe..."
+- Transition: Fades into Pulse Check.
+
 #### Checkpoint 1: The Pulse Check
 
 **UI Elements:**
 
-- Text: "Rate your current distress level."
+- Text: "I'm feeling..."
 
-- Component: A minimal, horizontal slider or a circular dial (0 = Calm, 10 = Maximum Distress).
+- Component: A minimal, horizontal slider (0 = Calm, 10 = Overwhelmed).
 
-- Dynamic Text: As the slider moves, the label changes (e.g., "Manageable", "Distressed", "Overwhelmed").
+- Dynamic Text: As the slider moves, the label changes (e.g., "Calm", "Unsettled", "Distressed", "Very Distressed", "Overwhelmed").
 
 - Button: "Continue" (Fade in only after the slider is touched).
 
 - Logic Gate: If Score ≥ 7: Transition to SOS Grounding. If Score < 7: Transition to Checkpoint 2 (The Container).
+
+- Transition: Slides up on entry, slides down on exit.
 
 #### Checkpoint 1.5: SOS Grounding (Conditional Branch)
 
@@ -48,15 +56,17 @@ Triggered only if distress is high.
 
 **UI Elements:**
 
-- Animation: A "Breathing Sphere" expanding (4s), holding (4s), and contracting (4s).
+- Animation: A "Breathing Sphere" expanding (4s), holding (2s), and contracting (4s).
 
-- Text Guide: "Inhale... Hold... Exhale..."
+- Text Guide: "Breathe in... Hold... Breathe out..."
 
-- Timer: Runs for 3 cycles (approx 45 seconds).
+- Timer: Runs for 3 cycles minimum.
 
 **Action:**
 
-- After the timer ends, a button appears: "I feel steady enough to proceed."
+- After 3 cycles, a button appears: "I feel steady enough to proceed."
+
+- After 10 cycles, a second button appears: "I need professional help now" (Red, links to crisis helpline).
 
 - Transition: Soft fade into Checkpoint 2 (The Container).
 
@@ -72,11 +82,11 @@ Goal: Containment, Resourcing, and Regulation (EMDR Phase 2).
 
 - Visual: An open box, chest, or vault in the center of the screen.
 
-- Text: "Visualize the event or image bothering you. Put it inside the container for now."
+- Text: "The Container" / "Visualize the event or image bothering you. When you're ready, put it inside the container for safekeeping."
 
 - Feedback: The lid snaps shut with a solid, reassuring sound (a heavy click). A padlock icon appears.
 
-- Transition: Once locked, the container shrinks and fades away, transitioning to the next screen.
+- Transition: Slides up on entry, slides down on exit.
 
 **Action:**
 
@@ -150,11 +160,11 @@ A clean, list-style dashboard.
 
 - Transitions: Use Framer Motion with AnimatePresence.
 
-- Exit Animation: opacity: 0, x: -50 (Slide left out).
+- Exit Animation: opacity: 0, y: 20 (Slide down out).
 
-- Entry Animation: opacity: 0, x: 50 (Slide in from right).
+- Entry Animation: opacity: 0, y: 20 -> 0 (Slide up in).
 
-This creates a feeling of forward momentum through the stages.
+- This creates a feeling of forward momentum through the stages.
 
 - Haptics: Use the Navigator.vibrate() API for the Decompression stage.
 

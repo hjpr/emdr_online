@@ -12,13 +12,13 @@ export const useApp = () => {
 
 export const AppProvider = ({ children }) => {
     const [sudsScore, setSudsScore] = useState(null)
-    const [currentCheckpoint, setCurrentCheckpoint] = useState(1)
+    const [currentCheckpoint, setCurrentCheckpoint] = useState(0)
     const [safePlaceName, setSafePlaceName] = useState('')
     const [backgroundColor, setBackgroundColor] = useState('#0f0f14')
 
     // Determine current stage based on checkpoint
     const getCurrentStage = () => {
-        if (currentCheckpoint === 1 || currentCheckpoint === 1.5) return 'triage'
+        if (currentCheckpoint === 0 || currentCheckpoint === 0.5 || currentCheckpoint === 1 || currentCheckpoint === 1.5) return 'triage'
         if (currentCheckpoint >= 2 && currentCheckpoint <= 4) return 'session'
         if (currentCheckpoint >= 5 && currentCheckpoint <= 6) return 'closing'
         return 'triage'
@@ -29,7 +29,11 @@ export const AppProvider = ({ children }) => {
     const nextCheckpoint = (scoreOverride = null) => {
         const effectiveScore = scoreOverride !== null ? scoreOverride : sudsScore
 
-        if (currentCheckpoint === 1) {
+        if (currentCheckpoint === 0) {
+            setCurrentCheckpoint(0.5) // Go to Disclaimer
+        } else if (currentCheckpoint === 0.5) {
+            setCurrentCheckpoint(1) // Go to Pulse Check
+        } else if (currentCheckpoint === 1) {
             // Check SUDS score for conditional routing
             if (effectiveScore !== null && effectiveScore >= 7) {
                 setCurrentCheckpoint(1.5) // Go to SOS Grounding
@@ -54,7 +58,7 @@ export const AppProvider = ({ children }) => {
     // Reset session completely
     const resetSession = () => {
         setSudsScore(null)
-        setCurrentCheckpoint(1)
+        setCurrentCheckpoint(0)
         setSafePlaceName('')
         setBackgroundColor('#0f0f14')
     }

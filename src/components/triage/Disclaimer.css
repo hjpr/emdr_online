@@ -1,0 +1,99 @@
+.disclaimer-checkpoint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: var(--space-lg);
+}
+
+.disclaimer-box {
+    background: var(--bg-glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    max-width: 600px;
+    width: 100%;
+    text-align: left;
+    margin: 0 auto;
+}
+
+.disclaimer-title {
+    font-size: var(--font-size-xl);
+    color: var(--color-accent);
+    margin-bottom: var(--space-md);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+}
+
+.disclaimer-icon {
+    width: 28px;
+    height: 28px;
+    color: var(--color-accent);
+}
+
+.disclaimer-text {
+    font-size: var(--font-size-md);
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+    line-height: 1.6;
+}
+
+.disclaimer-text strong {
+    color: var(--color-secondary);
+    font-weight: 600;
+}
+
+.checkbox-container {
+    margin-top: var(--space-lg);
+    display: flex;
+    justify-content: center;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    cursor: pointer;
+    user-select: none;
+}
+
+.disclaimer-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--color-primary);
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    transition: all var(--transition-fast);
+}
+
+.disclaimer-checkbox:checked {
+    background: var(--color-primary);
+}
+
+.disclaimer-checkbox:checked::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 16px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.checkbox-text {
+    font-size: var(--font-size-md);
+    color: var(--text-primary);
+}
+
+.disclaimer-checkpoint .continue-btn {
+    display: block;
+    margin: 2rem auto 0;
+}

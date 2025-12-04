@@ -10,7 +10,7 @@ const PulseCheck = () => {
 
     const getLabel = (value) => {
         if (value <= 2) return 'Calm'
-        if (value <= 4) return 'Manageable'
+        if (value <= 4) return 'Unsettled'
         if (value <= 6) return 'Distressed'
         if (value <= 8) return 'Very Distressed'
         return 'Overwhelmed'
@@ -41,14 +41,20 @@ const PulseCheck = () => {
     return (
         <motion.div
             className="checkpoint pulse-check"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
         >
-            <div className="checkpoint-content">
-                <h1 className="checkpoint-title">How are you feeling right now?</h1>
-                <p className="checkpoint-subtitle">Use the slider to select from 0 - calm, to 10 - overwhelmed.</p>
+            <motion.div
+                className="checkpoint-content"
+                initial={{ y: 20 }}
+                animate={{ y: 0 }}
+                exit={{ y: 20 }}
+                transition={{ duration: 0.6 }}
+            >
+                <h1 className="checkpoint-title">I'm feeling...</h1>
+                <p className="checkpoint-subtitle">Slide between 0-10. 0 is calm, 10 is overwhelmed.</p>
 
                 <div className="suds-container">
                     <div className="suds-display">
@@ -101,7 +107,7 @@ const PulseCheck = () => {
                 >
                     Continue
                 </motion.button>
-            </div>
+            </motion.div>
         </motion.div>
     )
 }
