@@ -9,8 +9,8 @@
   --color-calm: hsl(160, 40%, 50%);
 
   /* Dark Backgrounds */
-  --bg-dark: hsl(240, 15%, 8%);
-  --bg-dark-secondary: hsl(240, 12%, 12%);
+  --bg-dark: rgb(17, 17, 23);
+  --bg-dark-secondary: rgb(27, 27, 34);
   --bg-glass: rgba(255, 255, 255, 0.05);
   --bg-glass-hover: rgba(255, 255, 255, 0.08);
 

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { AppProvider, useApp } from './context/AppContext'
 
@@ -15,6 +16,7 @@ import Decompression from './components/session/Decompression'
 // Closing components
 import Anchor from './components/closing/Anchor'
 import Resources from './components/closing/Resources'
+import LoadingScreen from './components/LoadingScreen'
 
 import './App.css'
 
@@ -56,9 +58,26 @@ function AppContent() {
 }
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    // Simulate loading time (min 5s)
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 5000)
+
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
     <AppProvider>
-      <AppContent />
+      <AnimatePresence mode="wait">
+        {isLoading ? (
+          <LoadingScreen key="loading" />
+        ) : (
+          <AppContent key="app" />
+        )}
+      </AnimatePresence>
     </AppProvider>
   )
 }

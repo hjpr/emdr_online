@@ -8,9 +8,9 @@ const Intro = () => {
     const [step, setStep] = useState(0)
 
     useEffect(() => {
-        // Step 0: "I just had a hard day..." (0-4s)
-        // Step 1: "Before I go home" (4-8s)
-        // Step 2: Transition to next checkpoint (8s)
+        // Step 0: "Let's decompress from the day..." (0-6s)
+        // Step 1: "Before you go home" (6-12s)
+        // Step 2: Transition to next checkpoint (12s)
 
         const timer1 = setTimeout(() => {
             setStep(1)
@@ -45,14 +45,14 @@ const Intro = () => {
                             transition={{ duration: 1 }}
                             className="intro-text-group"
                         >
-                            <h1 className="intro-title">I just went through something.</h1>
+                            <h1 className="intro-title">Let's decompress from the day</h1>
                             <motion.p
                                 className="intro-title"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 3, duration: 1 }}
                             >
-                                I'm going to take a moment to breathe...
+                                And leave work where it should stay
                             </motion.p>
                         </motion.div>
                     )}
@@ -66,7 +66,7 @@ const Intro = () => {
                             transition={{ duration: 1 }}
                             className="intro-text-group"
                         >
-                            <h1 className="intro-title large">Before I go home.</h1>
+                            <h1 className="intro-title large">Before you go home</h1>
                         </motion.div>
                     )}
                 </AnimatePresence>
