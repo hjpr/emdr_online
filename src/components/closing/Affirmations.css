@@ -1,4 +1,4 @@
-.anchor {
+.affirmations-checkpoint {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -20,6 +20,13 @@
     font-weight: 500;
 }
 
+.affirmation-counter {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+}
+
 .hold-button-container {
     display: flex;
     justify-content: center;
@@ -31,30 +38,39 @@
     width: 200px;
     height: 200px;
     border-radius: 50%;
-    background: var(--bg-glass);
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    /* Gradient Background to match Container 'Yes' button */
+    background: linear-gradient(135deg, #22d3ee, #3b82f6);
+    box-shadow: 0 4px 16px rgba(34, 211, 238, 0.3);
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all var(--transition-base);
     user-select: none;
+    /* Ensure text is readable on gradient */
+    color: white;
 }
 
 .hold-button:hover {
-    background: var(--bg-glass-hover);
-    border-color: rgba(255, 255, 255, 0.3);
     transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(34, 211, 238, 0.4);
 }
 
 .hold-button.holding {
-    transform: scale(0.95);
-    background: var(--bg-glass-hover);
+    transform: scale(1.15);
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.6);
+    transition: transform 5s ease-out, box-shadow 0.3s ease;
+}
+
+/* When complete/released, spring back */
+.hold-button:not(.holding) {
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
 }
 
 .hold-button.complete {
-    background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(168, 85, 247, 0.2));
-    border-color: rgba(34, 211, 238, 0.5);
+    background: linear-gradient(135deg, #22d3ee, #3b82f6);
+    box-shadow: 0 0 40px rgba(34, 211, 238, 0.8);
 }
 
 .hold-progress-ring {

@@ -1,28 +1,35 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useApp } from '../../context/AppContext'
 import './Decompression.css'
 
-const Decompression = () => {
+const Decompression = ({ onComplete, skipInstructions }) => {
     const { nextCheckpoint } = useApp()
-    const [showInstructions, setShowInstructions] = useState(true)
+    const [phase, setPhase] = useState(skipInstructions ? 'active' : 'instructions') // 'instructions' | 'active'
     const [timeRemaining, setTimeRemaining] = useState(15)
     const [ballPosition, setBallPosition] = useState(0)
 
-    // Hide instructions after 5 seconds
+    // Phase 1: Instructions (4 seconds)
     useEffect(() => {
-        const instructionTimer = setTimeout(() => {
-            setShowInstructions(false)
-        }, 5000)
+        if (phase === 'instructions') {
+            const timer = setTimeout(() => {
+                setPhase('active')
+            }, 4000)
+            return () => clearTimeout(timer)
+        }
+    }, [phase])
 
-        return () => clearTimeout(instructionTimer)
-    }, [])
-
-    // Timer countdown
+    // Phase 2: Active (Timer countdown)
     useEffect(() => {
+        if (phase !== 'active') return
+
         if (timeRemaining <= 0) {
             setTimeout(() => {
-                nextCheckpoint()
+                if (onComplete) {
+                    onComplete()
+                } else {
+                    nextCheckpoint()
+                }
             }, 1000)
             return
         }
@@ -32,10 +39,12 @@ const Decompression = () => {
         }, 1000)
 
         return () => clearInterval(timer)
-    }, [timeRemaining, nextCheckpoint])
+    }, [phase, timeRemaining, nextCheckpoint, onComplete])
 
-    // Ball animation position (0 to 1, repeating)
+    // Phase 2: Active (Ball animation)
     useEffect(() => {
+        if (phase !== 'active') return
+
         const duration = 1000 // 1 second per pass
         const startTime = Date.now()
 
@@ -46,13 +55,13 @@ const Decompression = () => {
             const position = (Math.sin(cycle * Math.PI * 2 - Math.PI / 2) + 1) / 2
             setBallPosition(position)
 
-            // Haptic feedback at edge
+            // Haptic feedback at edge if supported
             if (
                 cycle < 0.02 &&
                 navigator.vibrate &&
-                elapsed > 100 // Avoid vibrating immediately on mount
+                elapsed > 100 // Avoid vibrating immediately
             ) {
-                navigator.vibrate(50)
+                // navigator.vibrate(50) // Optional: uncomment if requested
             }
 
             requestAnimationFrame(animate)
@@ -60,7 +69,7 @@ const Decompression = () => {
 
         const animationFrame = requestAnimationFrame(animate)
         return () => cancelAnimationFrame(animationFrame)
-    }, [])
+    }, [phase])
 
     return (
         <motion.div
@@ -71,33 +80,39 @@ const Decompression = () => {
             transition={{ duration: 0.6 }}
         >
             <div className="decompression-container">
-                {showInstructions && (
-                    <motion.div
-                        className="instructions-overlay"
-                        initial={{ opacity: 1 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                    >
-                        <p className="instruction-text">
-                            Follow the ball with your eyes. <br />
-                            Tap your feet left and right if you can. <br />
-                            Just breathe.
-                        </p>
-                    </motion.div>
-                )}
-
-                <div className="ball-track">
-                    <motion.div
-                        className="bilateral-ball"
-                        style={{
-                            left: `${ballPosition * 100}%`
-                        }}
-                    />
-                </div>
-
-                <div className="timer-display">
-                    {timeRemaining}s
-                </div>
+                <AnimatePresence mode="wait">
+                    {phase === 'instructions' ? (
+                        <motion.div
+                            key="instructions"
+                            className="instructions-overlay"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 1.1 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <p className="instruction-text">
+                                Follow the ball with your eyes. <br />
+                                Tap your feet left and right if you can. <br />
+                                Just breathe.
+                            </p>
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key="ball-track"
+                            className="ball-track"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <motion.div
+                                className="bilateral-ball"
+                                style={{
+                                    left: `${ballPosition * 100}%`
+                                }}
+                            />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </motion.div>
     )

@@ -3,18 +3,12 @@ import { motion } from 'framer-motion'
 import { useApp } from '../../context/AppContext'
 import './PulseCheck.css'
 
-const PulseCheck = () => {
+const PulseCheck = ({ onComplete }) => {
     const { setSudsScore, nextCheckpoint } = useApp()
     const [score, setScore] = useState(0)
     const [hasInteracted, setHasInteracted] = useState(false)
 
-    const getLabel = (value) => {
-        if (value <= 2) return 'Calm'
-        if (value <= 4) return 'Unsettled'
-        if (value <= 6) return 'Distressed'
-        if (value <= 8) return 'Very Distressed'
-        return 'Overwhelmed'
-    }
+
 
     const getColor = (value) => {
         if (value <= 2) return '#4ade80'
@@ -33,9 +27,13 @@ const PulseCheck = () => {
     }
 
     const handleContinue = () => {
-        setSudsScore(score)
-        // Pass score directly to avoid async state update issues
-        nextCheckpoint(score)
+        if (onComplete) {
+            onComplete(score)
+        } else {
+            setSudsScore(score)
+            // Pass score directly to avoid async state update issues
+            nextCheckpoint(score)
+        }
     }
 
     return (
@@ -68,15 +66,7 @@ const PulseCheck = () => {
                         >
                             {score}
                         </motion.div>
-                        <motion.div
-                            className="suds-label"
-                            style={{ color: getColor(score) }}
-                            key={`label-${score}`}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                        >
-                            {getLabel(score)}
-                        </motion.div>
+
                     </div>
 
                     <div className="slider-container">

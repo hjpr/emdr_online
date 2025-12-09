@@ -11,13 +11,16 @@
     width: 100%;
     max-width: 1000px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .instructions-overlay {
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    transform: translateX(-50%);
+    /* Position normally in flow to sit above the ball track */
+    position: relative;
+    margin-bottom: 2rem;
     text-align: center;
     z-index: 10;
 }
@@ -52,16 +55,7 @@
     will-change: left;
 }
 
-.timer-display {
-    position: absolute;
-    bottom: 10%;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: var(--font-size-2xl);
-    color: var(--text-muted);
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-}
+
 
 @media (max-width: 768px) {
     .bilateral-ball {

@@ -12,15 +12,14 @@ export const useApp = () => {
 
 export const AppProvider = ({ children }) => {
     const [sudsScore, setSudsScore] = useState(null)
-    const [currentCheckpoint, setCurrentCheckpoint] = useState(0)
-    const [safePlaceName, setSafePlaceName] = useState('')
+    const [currentCheckpoint, setCurrentCheckpoint] = useState(1)
     const [backgroundColor, setBackgroundColor] = useState('#0f0f14')
 
     // Determine current stage based on checkpoint
     const getCurrentStage = () => {
-        if (currentCheckpoint === 0 || currentCheckpoint === 0.5 || currentCheckpoint === 1 || currentCheckpoint === 1.5) return 'triage'
-        if (currentCheckpoint >= 2 && currentCheckpoint <= 4) return 'session'
-        if (currentCheckpoint >= 5 && currentCheckpoint <= 6) return 'closing'
+        if (currentCheckpoint <= 4) return 'triage'
+        if (currentCheckpoint === 5 || currentCheckpoint === 6) return 'session'
+        if (currentCheckpoint >= 7) return 'closing'
         return 'triage'
     }
 
@@ -29,24 +28,39 @@ export const AppProvider = ({ children }) => {
     const nextCheckpoint = (scoreOverride = null) => {
         const effectiveScore = scoreOverride !== null ? scoreOverride : sudsScore
 
-        if (currentCheckpoint === 0) {
-            setCurrentCheckpoint(0.5) // Go to Disclaimer
-        } else if (currentCheckpoint === 0.5) {
-            setCurrentCheckpoint(1) // Go to Pulse Check
-        } else if (currentCheckpoint === 1) {
-            // Check SUDS score for conditional routing
-            if (effectiveScore !== null && effectiveScore >= 7) {
-                setCurrentCheckpoint(1.5) // Go to SOS Grounding
-            } else {
-                setCurrentCheckpoint(2) // Skip to Container
-            }
-        } else if (currentCheckpoint === 1.5) {
-            setCurrentCheckpoint(2) // After grounding, go to Container
-        } else if (currentCheckpoint === 4 && currentCheckpoint < 5) {
-            // Normal progression
-            setCurrentCheckpoint(currentCheckpoint + 1)
-        } else if (currentCheckpoint < 6) {
-            setCurrentCheckpoint(currentCheckpoint + 1)
+        switch (currentCheckpoint) {
+            case 1:
+                setCurrentCheckpoint(2) // Intro -> Disclaimer
+                break
+            case 2:
+                setCurrentCheckpoint(3) // Disclaimer -> Pulse Check
+                break
+            case 3:
+                // Check SUDS score for conditional routing (Pulse Check)
+                if (effectiveScore !== null && effectiveScore >= 7) {
+                    setCurrentCheckpoint(4) // High distress -> SOS Grounding
+                } else {
+                    setCurrentCheckpoint(5) // Low distress -> Session Explanation
+                }
+                break
+            case 4:
+                setCurrentCheckpoint(5) // SOS -> Session Explanation
+                break
+            case 5:
+                setCurrentCheckpoint(6) // Explanation -> Recall
+                break
+            case 6:
+                // Recall -> Affirmations
+                setCurrentCheckpoint(7)
+                break
+            case 7:
+                setCurrentCheckpoint(8) // Affirmations -> Resources
+                break
+            default:
+                if (currentCheckpoint < 8) {
+                    setCurrentCheckpoint(currentCheckpoint + 1)
+                }
+                break
         }
     }
 
@@ -58,8 +72,7 @@ export const AppProvider = ({ children }) => {
     // Reset session completely
     const resetSession = () => {
         setSudsScore(null)
-        setCurrentCheckpoint(0)
-        setSafePlaceName('')
+        setCurrentCheckpoint(1)
         setBackgroundColor('#0f0f14')
     }
 
@@ -69,8 +82,6 @@ export const AppProvider = ({ children }) => {
         currentCheckpoint,
         setCurrentCheckpoint,
         currentStage: getCurrentStage(),
-        safePlaceName,
-        setSafePlaceName,
         backgroundColor,
         setBackgroundColor,
         nextCheckpoint,

@@ -1,0 +1,20 @@
+.session-explanation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: var(--space-lg);
+    text-align: center;
+}
+
+.explanation-content {
+    max-width: 800px;
+    width: 100%;
+}
+
+.explanation-text {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 300;
+    color: var(--text-primary);
+    line-height: 1.4;
+}

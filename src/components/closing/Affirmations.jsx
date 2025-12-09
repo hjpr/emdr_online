@@ -1,25 +1,37 @@
-import { useState, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useRef, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useApp } from '../../context/AppContext'
-import './Anchor.css'
+import './Affirmations.css'
 
-const affirmations = [
-    'I did my best today',
-    'I am safe now',
-    'That moment is over',
-    'I showed up when it mattered',
-    'I am more than this moment',
-    'I deserve peace and rest'
+const allAffirmations = [
+    "I leave what no longer serves me in the past.",
+    "I deserve the same kindness I give to others, and I extend that kindness to myself.",
+    "I am capable of facing any challenges that come my way.",
+    "Let go of what was, accept what is.",
+    "I have courage and confidence to do the right thing.",
+    "I choose positivity. I choose happiness. I see both all around me.",
+    "Not everybody will understand my situation and it is okay. ",
+    "Peace comes from within. Do not seek it without.",
+    "Quiet the mind, and the soul will speak.",
+    "I am not what happened to me, I am what I choose to become.",
+    "I am open to new experiences and challenges, which help me grow and learn. ",
+    "I have survived my anxiety before and I will survive it again now. "
 ]
 
-const Anchor = () => {
+const Affirmations = () => {
     const { nextCheckpoint } = useApp()
-    const [affirmation] = useState(() => {
-        return affirmations[Math.floor(Math.random() * affirmations.length)]
+
+    // Select 4 random unique affirmations on mount
+    const [affirmations] = useState(() => {
+        const shuffled = [...allAffirmations].sort(() => 0.5 - Math.random())
+        return shuffled.slice(0, 4)
     })
+
+    const [currentIndex, setCurrentIndex] = useState(0)
     const [isHolding, setIsHolding] = useState(false)
     const [progress, setProgress] = useState(0)
     const [isComplete, setIsComplete] = useState(false)
+
     const holdTimer = useRef(null)
     const progressInterval = useRef(null)
 
@@ -28,7 +40,7 @@ const Anchor = () => {
 
         setIsHolding(true)
         const startTime = Date.now()
-        const duration = 3000 // 3 seconds
+        const duration = 5000 // 5 seconds
 
         progressInterval.current = setInterval(() => {
             const elapsed = Date.now() - startTime
@@ -41,10 +53,7 @@ const Anchor = () => {
         }, 16)
 
         holdTimer.current = setTimeout(() => {
-            setIsComplete(true)
-            setTimeout(() => {
-                nextCheckpoint()
-            }, 1000)
+            handleAffirmationComplete()
         }, duration)
     }
 
@@ -60,33 +69,56 @@ const Anchor = () => {
         }
     }
 
+    const handleAffirmationComplete = () => {
+        setIsComplete(true)
+        setProgress(100)
+
+        setTimeout(() => {
+            if (currentIndex < affirmations.length - 1) {
+                // Next affirmation
+                setIsHolding(false)
+                setProgress(0)
+                setIsComplete(false)
+                setCurrentIndex(prev => prev + 1)
+            } else {
+                // All done
+                setTimeout(() => {
+                    nextCheckpoint()
+                }, 1000)
+            }
+        }, 1500) // Delay before next affirmation
+    }
+
     return (
         <motion.div
-            className="checkpoint anchor"
+            className="checkpoint affirmations-checkpoint"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
         >
             <div className="checkpoint-content">
-                <motion.div
-                    className="affirmation-container"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5, duration: 1 }}
-                >
-                    <p className="affirmation-text">{affirmation}</p>
-                </motion.div>
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={currentIndex}
+                        className="affirmation-container"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        <p className="affirmation-text">{affirmations[currentIndex]}</p>
+                    </motion.div>
+                </AnimatePresence>
 
                 <motion.div
                     className="hold-button-container"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 1.5 }}
+                    transition={{ delay: 1 }}
                 >
                     <div
-                        className={`hold-button ${isHolding ? 'holding' : ''} ${isComplete ? 'complete' : ''
-                            }`}
+                        className={`hold-button ${isHolding ? 'holding' : ''} ${isComplete ? 'complete' : ''}`}
                         onMouseDown={handleHoldStart}
                         onMouseUp={handleHoldEnd}
                         onMouseLeave={handleHoldEnd}
@@ -100,7 +132,7 @@ const Anchor = () => {
                                 cy="50"
                                 r="45"
                                 fill="none"
-                                stroke="rgba(255,255,255,0.1)"
+                                stroke="rgba(255,255,255,0.2)"
                                 strokeWidth="2"
                             />
                             <motion.circle
@@ -109,8 +141,8 @@ const Anchor = () => {
                                 cy="50"
                                 r="45"
                                 fill="none"
-                                stroke="url(#hold-gradient)"
-                                strokeWidth="2"
+                                stroke="white"
+                                strokeWidth="3"
                                 strokeLinecap="round"
                                 initial={{ pathLength: 0 }}
                                 animate={{ pathLength: progress / 100 }}
@@ -119,12 +151,6 @@ const Anchor = () => {
                                     transformOrigin: 'center'
                                 }}
                             />
-                            <defs>
-                                <linearGradient id="hold-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stopColor="#22d3ee" />
-                                    <stop offset="100%" stopColor="#a855f7" />
-                                </linearGradient>
-                            </defs>
                         </svg>
                         <span className="hold-text">
                             {isComplete ? '✓' : 'Hold to Absorb'}
@@ -136,4 +162,4 @@ const Anchor = () => {
     )
 }
 
-export default Anchor
+export default Affirmations
