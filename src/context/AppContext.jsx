@@ -14,13 +14,36 @@ export const AppProvider = ({ children }) => {
     const [sudsScore, setSudsScore] = useState(null)
     const [currentCheckpoint, setCurrentCheckpoint] = useState(1)
     const [backgroundColor, setBackgroundColor] = useState('#0f0f14')
+    const [sessionRatings, setSessionRatings] = useState({})
+    const [isPostSessionSOS, setIsPostSessionSOS] = useState(false)
 
-    // Determine current stage based on checkpoint
-    const getCurrentStage = () => {
-        if (currentCheckpoint <= 4) return 'triage'
-        if (currentCheckpoint === 5 || currentCheckpoint === 6) return 'session'
-        if (currentCheckpoint >= 7) return 'closing'
-        return 'triage'
+    // Save initial Triage rating
+    const saveTriageRating = (score) => {
+        setSessionRatings(prev => ({
+            ...prev,
+            triageRating: score
+        }))
+    }
+
+    // Save Final rating
+    const saveFinalRating = (score) => {
+        setSessionRatings(prev => ({
+            ...prev,
+            finalRating: score
+        }))
+    }
+
+    // Save sequential Recall ratings (recallRating1, recallRating2, etc.)
+    const saveRecallRating = (score) => {
+        setSessionRatings(prev => {
+            // Count how many recall ratings already exist to determine next index
+            const recallKeys = Object.keys(prev).filter(key => key.startsWith('recallRating'))
+            const nextIndex = recallKeys.length + 1
+            return {
+                ...prev,
+                [`recallRating${nextIndex}`]: score
+            }
+        })
     }
 
     // Navigate to next checkpoint with conditional logic
@@ -44,7 +67,12 @@ export const AppProvider = ({ children }) => {
                 }
                 break
             case 4:
-                setCurrentCheckpoint(5) // SOS -> Session Explanation
+                if (isPostSessionSOS) {
+                    setIsPostSessionSOS(false)
+                    setCurrentCheckpoint(9) // SOS -> Resources (end of post-session/crisis loop)
+                } else {
+                    setCurrentCheckpoint(5) // SOS -> Session Explanation (normal flow)
+                }
                 break
             case 5:
                 setCurrentCheckpoint(6) // Explanation -> Recall
@@ -54,10 +82,22 @@ export const AppProvider = ({ children }) => {
                 setCurrentCheckpoint(7)
                 break
             case 7:
-                setCurrentCheckpoint(8) // Affirmations -> Resources
+                setCurrentCheckpoint(8) // Affirmations -> Final Rating
+                break
+            case 8:
+                // Final Rating Logic
+                if (effectiveScore !== null && effectiveScore >= 7) {
+                    setIsPostSessionSOS(true)
+                    setCurrentCheckpoint(4) // High distress -> SOS Grounding
+                } else {
+                    setCurrentCheckpoint(9) // Low/Medium distress -> Resources
+                }
+                break
+            case 9:
+                // End of line
                 break
             default:
-                if (currentCheckpoint < 8) {
+                if (currentCheckpoint < 9) {
                     setCurrentCheckpoint(currentCheckpoint + 1)
                 }
                 break
@@ -72,6 +112,8 @@ export const AppProvider = ({ children }) => {
     // Reset session completely
     const resetSession = () => {
         setSudsScore(null)
+        setSessionRatings({})
+        setIsPostSessionSOS(false)
         setCurrentCheckpoint(1)
         setBackgroundColor('#0f0f14')
     }
@@ -81,7 +123,10 @@ export const AppProvider = ({ children }) => {
         setSudsScore,
         currentCheckpoint,
         setCurrentCheckpoint,
-        currentStage: getCurrentStage(),
+        sessionRatings,
+        saveTriageRating,
+        saveRecallRating,
+        saveFinalRating,
         backgroundColor,
         setBackgroundColor,
         nextCheckpoint,

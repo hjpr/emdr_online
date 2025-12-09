@@ -4,7 +4,7 @@ import { useApp } from '../../context/AppContext'
 import './PulseCheck.css'
 
 const PulseCheck = ({ onComplete }) => {
-    const { setSudsScore, nextCheckpoint } = useApp()
+    const { setSudsScore, nextCheckpoint, saveTriageRating, saveFinalRating, currentCheckpoint } = useApp()
     const [score, setScore] = useState(0)
     const [hasInteracted, setHasInteracted] = useState(false)
 
@@ -31,6 +31,11 @@ const PulseCheck = ({ onComplete }) => {
             onComplete(score)
         } else {
             setSudsScore(score)
+            if (currentCheckpoint === 8) {
+                saveFinalRating(score)
+            } else {
+                saveTriageRating(score)
+            }
             // Pass score directly to avoid async state update issues
             nextCheckpoint(score)
         }

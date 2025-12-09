@@ -41,6 +41,8 @@ function AppContent() {
       case 7:
         return <Affirmations key="affirmations" />
       case 8:
+        return <PulseCheck key="final-rating" />
+      case 9:
         return <Resources key="resources" />
       default:
         // Default to Intro if 0 or undefined, or PulseCheck? 

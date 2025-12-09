@@ -1,9 +1,14 @@
+import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useApp } from '../../context/AppContext'
 import './Resources.css'
 
 const Resources = () => {
-    const { goToCheckpoint, resetSession } = useApp()
+    const { goToCheckpoint, resetSession, sessionRatings } = useApp()
+
+    useEffect(() => {
+        console.log('Final Session Ratings:', sessionRatings)
+    }, [sessionRatings])
 
     const handleRepeatDecompression = () => {
         goToCheckpoint(4) // Go back to Decompression
@@ -93,6 +98,13 @@ const Resources = () => {
                         <span className="btn-label">End Session</span>
                         <span className="btn-description">Return to the beginning</span>
                     </motion.button>
+                </div>
+
+                <div style={{ margin: '20px 0', padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px' }}>
+                    <h4>Debug: Session Ratings</h4>
+                    <pre style={{ textAlign: 'left', fontSize: '12px' }}>
+                        {JSON.stringify(sessionRatings, null, 2)}
+                    </pre>
                 </div>
 
                 <motion.p

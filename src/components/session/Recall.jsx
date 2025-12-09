@@ -6,7 +6,7 @@ import PulseCheck from '../triage/PulseCheck'
 import './Recall.css'
 
 const Recall = () => {
-    const { nextCheckpoint } = useApp()
+    const { nextCheckpoint, saveRecallRating } = useApp()
 
     // State Machine
     // 'input': Describe Issue (Initial state)
@@ -44,6 +44,7 @@ const Recall = () => {
 
     const handlePostRatingComplete = (score) => {
         setPostScore(score)
+        saveRecallRating(score)
 
         // Logic Check
         // Success if: score < 4 OR improved by >= 2 (if preScore exists)
